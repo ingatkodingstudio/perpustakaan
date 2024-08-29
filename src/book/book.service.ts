@@ -1,57 +1,44 @@
 import { Injectable, NotFoundException, Response } from '@nestjs/common';
 import { Book } from './book.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class BookService {
-    private savedBooks: Book[] = [];
+    constructor(@InjectRepository(Book) private bookRepository: Repository<Book>) { }
 
-    saveBook(book: Book) {
-        this.savedBooks.push(book);
+
+    async saveBook(book: Book): Promise<Book> {
+        return this.bookRepository.save(book);
     }
 
-    getBooks(): Book[] {
-        let index = 0;
-        const response = this.savedBooks.map(e => {
-            const bookIndex = index
-            index++
-
-            const bookIndexed = {
-                index: bookIndex,
-                ...e
-            }
-
-            return bookIndexed;
-        })
-        return response;
+    async getBooks(): Promise<Book[]> {
+        return this.bookRepository.find();
     }
 
-    getBook(index: number) {
-        const choosenBook = this.getBookWithIndex(index);
+    async getBook(id: number): Promise<Book> {
+        return this.getBookById(id);
+    }
 
-        return {
-            index: Number(index),
-            ...choosenBook
+    async updateBook(id: number, book: Book): Promise<Book> {
+        const oldBook = await this.getBookById(id);
+        oldBook.author = book.author;
+        oldBook.title = book.title;
+
+        return this.bookRepository.save(oldBook);
+    }
+
+    private async getBookById(id: number): Promise<Book>  {
+        const book = await this.bookRepository.findOneBy({ id });
+
+        if (!book) {
+            throw new NotFoundException(`No book with id ${id}`);
         }
 
+        return book;
     }
 
-    updateBook(index: number, book: Book) {
-        this.getBookWithIndex(index);
-
-        this.savedBooks[index] = book;
-    }
-
-    private getBookWithIndex(index: number): Book {
-        const choosenBook = this.savedBooks[index]
-
-        if (!choosenBook) {
-            throw new NotFoundException(`Book with index ${index} not found`);
-        }
-
-        return choosenBook;
-    }
-
-    removeBook(index: number) {
-        this.savedBooks.splice(index);
+    async removeBook(id: number) {
+        return this.bookRepository.delete(id);
     }
 }
