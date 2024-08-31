@@ -9,5 +9,6 @@ import { BookModule } from 'src/book/book.module';
   imports: [TypeOrmModule.forFeature([PhysicalBook]), BookModule],
   controllers: [PhysicalBookController],
   providers: [PhysicalBookService],
+  exports: [TypeOrmModule.forFeature()]
 })
 export class PhysicalBookModule { }

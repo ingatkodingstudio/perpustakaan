@@ -3,9 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BookModule } from './book/book.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Book } from './book/book.entity';
 import { PhysicalBookModule } from './physical-book/physical-book.module';
-import { PhysicalBook } from './physical-book/entities/physical-book.entity';
+import { BarcodeModule } from './barcode/barcode.module';
 
 @Module({
   imports: [
@@ -13,12 +12,13 @@ import { PhysicalBook } from './physical-book/entities/physical-book.entity';
       {
         type: 'sqlite',
         database: 'perpustakaan.db',
-        entities: [Book, PhysicalBook],
+        autoLoadEntities: true,
         synchronize: true
       }
     ),
     BookModule,
     PhysicalBookModule,
+    BarcodeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
