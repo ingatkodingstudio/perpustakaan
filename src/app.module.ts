@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { BookModule } from './book/book.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Book } from './book/book.entity';
+import { PhysicalBookModule } from './physical-book/physical-book.module';
+import { PhysicalBook } from './physical-book/entities/physical-book.entity';
 
 @Module({
   imports: [
@@ -11,11 +13,12 @@ import { Book } from './book/book.entity';
       {
         type: 'sqlite',
         database: 'perpustakaan.db',
-        entities: [Book],
+        entities: [Book, PhysicalBook],
         synchronize: true
       }
     ),
     BookModule,
+    PhysicalBookModule,
   ],
   controllers: [AppController],
   providers: [AppService],
