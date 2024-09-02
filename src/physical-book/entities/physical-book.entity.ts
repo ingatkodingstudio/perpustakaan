@@ -1,5 +1,6 @@
+import { Barcode } from "src/barcode/entities/barcode.entity";
 import { Book } from "src/book/book.entity";
-import { Column, Entity, Generated, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Generated, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class PhysicalBook {
@@ -18,4 +19,7 @@ export class PhysicalBook {
 
     @ManyToOne(() => Book, book => book.physical)
     book: Book
+
+    @OneToOne(() => Barcode, barcode => barcode.physicalBook)
+    barcode: Barcode
 }
