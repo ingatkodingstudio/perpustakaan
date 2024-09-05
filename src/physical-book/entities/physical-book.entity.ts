@@ -1,5 +1,5 @@
 import { Barcode } from "src/barcode/entities/barcode.entity";
-import { Book } from "src/book/book.entity";
+import { Book } from "src/book/entities/book.entity";
 import { Location } from "src/location/entities/location.entity";
 import { Column, Entity, Generated, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
