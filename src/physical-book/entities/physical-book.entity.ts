@@ -1,6 +1,7 @@
 import { Barcode } from "src/barcode/entities/barcode.entity";
-import { Book } from "src/book/book.entity";
-import { Column, Entity, Generated, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Book } from "src/book/entities/book.entity";
+import { Location } from "src/location/entities/location.entity";
+import { Column, Entity, Generated, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class PhysicalBook {
@@ -8,10 +9,10 @@ export class PhysicalBook {
     id: number;
 
     @Generated('uuid')
-    @Column({unique: true})
+    @Column({ unique: true })
     copyNumber: string;
 
-    @Column({type:'bigint', default: Date.now()})
+    @Column({ type: 'bigint', default: Date.now() })
     registeredDate: number
 
     @Column()
@@ -22,4 +23,7 @@ export class PhysicalBook {
 
     @OneToOne(() => Barcode, barcode => barcode.physicalBook)
     barcode: Barcode
+
+    @ManyToMany(() => Location, { onUpdate: 'CASCADE' })
+    location: Location
 }

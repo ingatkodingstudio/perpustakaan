@@ -3,8 +3,8 @@ import { CreatePhysicalBookDto } from './dto/create-physical-book.dto';
 import { UpdatePhysicalBookDto } from './dto/update-physical-book.dto';
 import { PhysicalBook } from './entities/physical-book.entity';
 import { Repository } from 'typeorm';
-import { Book } from 'src/book/book.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Book } from 'src/book/entities/book.entity';
 
 @Injectable()
 export class PhysicalBookService {
