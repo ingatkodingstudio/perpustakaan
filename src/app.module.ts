@@ -6,16 +6,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PhysicalBookModule } from './physical-book/physical-book.module';
 import { BarcodeModule } from './barcode/barcode.module';
 import { LocationModule } from './location/location.module';
+import { ConfigModule } from '@nestjs/config';
+import { typeOrmConfig } from './db/typeorm.config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot(
-      {
-        type: 'sqlite',
-        database: 'perpustakaan.db',
-        autoLoadEntities: true,
-        synchronize: true
-      }
+      typeOrmConfig
     ),
     BookModule,
     PhysicalBookModule,
