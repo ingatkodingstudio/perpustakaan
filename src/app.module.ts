@@ -7,7 +7,8 @@ import { PhysicalBookModule } from './physical-book/physical-book.module';
 import { BarcodeModule } from './barcode/barcode.module';
 import { LocationModule } from './location/location.module';
 import { ConfigModule } from '@nestjs/config';
-import { typeOrmConfig } from './db/typeorm.config';
+import { AuthorModule } from './author/author.module';
+import { devConfig } from './db/dev.config';
 
 @Module({
   imports: [
@@ -15,12 +16,13 @@ import { typeOrmConfig } from './db/typeorm.config';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(
-      typeOrmConfig
+      devConfig,
     ),
     BookModule,
     PhysicalBookModule,
     BarcodeModule,
     LocationModule,
+    AuthorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

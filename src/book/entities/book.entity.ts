@@ -1,5 +1,6 @@
+import { Author } from "src/author/entities/author.entity";
 import { PhysicalBook } from "src/physical-book/entities/physical-book.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity()
 export class Book {
@@ -9,8 +10,8 @@ export class Book {
     @Column()
     title: string
 
-    @Column()
-    author: string
+    @ManyToOne(() => Author, author => author.books)
+    author: Author
 
     @OneToMany(() => PhysicalBook, physicalBook => physicalBook.book)
     physical: PhysicalBook[]
