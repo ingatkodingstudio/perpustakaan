@@ -1,13 +1,15 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { BookService } from './book.service';
 import { Book } from './entities/book.entity';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 @Controller('book')
 export class BookController {
     constructor(private readonly bookService: BookService) { }
 
     @Post()
-    saveBook(@Body() book: Book) {
+    saveBook(@Body() book: CreateBookDto) {
         this.bookService.saveBook(book)
     }
 
@@ -22,7 +24,7 @@ export class BookController {
     }
 
     @Put(':index')
-    updateBook(@Param('index') index: number, @Body() book: Book) {
+    updateBook(@Param('index') index: number, @Body() book: UpdateBookDto) {
         this.bookService.updateBook(index, book);
     }
 

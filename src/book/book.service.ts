@@ -1,15 +1,31 @@
-import { Injectable, NotFoundException, Response } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, Response } from '@nestjs/common';
 import { Book } from './entities/book.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BookResponseDto } from './dto/book-response.dto';
+import { CreateBookDto } from './dto/create-book.dto';
+import { Author } from 'src/author/entities/author.entity';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 @Injectable()
 export class BookService {
-    constructor(@InjectRepository(Book) private bookRepository: Repository<Book>) { }
+    constructor(
+        @InjectRepository(Book) private bookRepository: Repository<Book>,
+        @InjectRepository(Author) private authorRepository: Repository<Author>
+    ) { }
 
 
-    async saveBook(book: Book): Promise<Book> {
+    async saveBook(bookDto: CreateBookDto): Promise<Book> {
+        const author = await this.authorRepository.findOne({ where: { id: bookDto.authorId } });
+
+        if (!author) {
+            throw new BadRequestException();
+        }
+
+        const book = new Book();
+        book.title = bookDto.title;
+        book.author = author;
+
         return this.bookRepository.save(book);
     }
 
@@ -28,10 +44,24 @@ export class BookService {
         return this.getBookById(id);
     }
 
-    async updateBook(id: number, book: Book): Promise<Book> {
+    async updateBook(id: number, book: UpdateBookDto): Promise<Book> {
         const oldBook = await this.getBookById(id);
-        oldBook.author = book.author;
-        oldBook.title = book.title;
+
+
+        if (!oldBook) {
+            throw new BadRequestException();
+        }
+
+        Object.assign(oldBook, book);
+
+        if (book.authorId) {
+            const author = await this.authorRepository.findOne({ where: { id: book.authorId } });
+
+            if (author) {
+                oldBook.author = author;
+            }
+        }
+
 
         return this.bookRepository.save(oldBook);
     }

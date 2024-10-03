@@ -8,7 +8,7 @@ import { BarcodeModule } from './barcode/barcode.module';
 import { LocationModule } from './location/location.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthorModule } from './author/author.module';
-import { devConfig } from './db/dev.config';
+import { typeOrmConfig } from './db/typeorm.config';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { devConfig } from './db/dev.config';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(
-      devConfig,
+      typeOrmConfig,
     ),
     BookModule,
     PhysicalBookModule,
